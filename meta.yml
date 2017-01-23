@@ -10,10 +10,10 @@ description: "How federal government domains are meeting best practices on the w
 # Data sources. These URLs should have their content updated in-place.
 data:
   # URL where we download the .gov domain list from.
-  domains_url: "https://raw.githubusercontent.com/GSA/data/gh-pages/dotgov-domains/current-federal.csv"
+  domains_url: "https://www.dropbox.com/s/368prpwbg9cbgas/domains__current-federal_mos.csv?dl=1"
 
   # URL where we download the participating DAP .gov list from.
-  analytics_url: "https://analytics.usa.gov/data/live/second-level-domains.csv"
+  analytics_url: "https://www.dropbox.com/s/4e0uui88ba7keuj/analytics__second-level-domains_mos.csv?dl=1"
 
   # DAP URL where we source public .gov subdomains from.
-  analytics_subdomains_url: "https://analytics.usa.gov/data/live/sites.csv"
+  analytics_subdomains_url: "https://www.dropbox.com/s/mlgnnzioy37qzgg/analytics_subdomains__sites_mos.csv?dl=1"

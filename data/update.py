@@ -50,18 +50,21 @@ BUCKET_NAME = "pulse.cio.gov"
 
 # domain-scan information
 SCAN_TARGET = os.path.join(this_dir, "./output/scan")
-SCAN_COMMAND = os.environ.get("DOMAIN_SCAN_PATH", None)
+# empty in case of running in docker
+SCAN_COMMAND = os.environ.get("DOMAIN_SCAN_PATH", "")
 SCANNERS = os.environ.get("SCANNERS", "pshtt,analytics,sslyze,tls")
 ANALYTICS_URL = os.environ.get("ANALYTICS_URL", META["data"]["analytics_url"])
 
 # subdomain gathering/scanning information
 GATHER_TARGET = os.path.join(this_dir, "./output/subdomains/gather")
 GATHER_COMMAND = os.environ.get("DOMAIN_GATHER_PATH", None)
-GATHER_SUFFIX = ".gov"
+# change to common '.ru' suffix
+GATHER_SUFFIX = ".ru"
 GATHER_ANALYTICS_URL = META["data"]["analytics_subdomains_url"]
 GATHER_PARENTS = DOMAINS  # Limit subdomains to set of base domains.
 GATHERERS = [
-  ["censys", "--export"],
+  # turn off censys
+  #["censys", "--export"],
   ["url", "--url=%s" % GATHER_ANALYTICS_URL]
 ]
 SUBDOMAIN_SCAN_TARGET = os.path.join(this_dir, "./output/subdomains/scan")
@@ -169,6 +172,9 @@ def scan(options):
   output = "--output=%s" % SCAN_TARGET
 
   full_command =[
+    # add run via docker
+    # add volume, hardcode uhhh!
+    "docker", "run", "-v", "/home/ouser/pulse/:/home/ouser/pulse", "domainscan_scan",
     SCAN_COMMAND, DOMAINS,
     scanners, analytics, output,
     "--debug",
@@ -223,6 +229,9 @@ def subdomains(options):
     scanner_output = os.path.join(SUBDOMAIN_SCAN_TARGET, gatherer)
 
     full_command = [
+    # add run via docker
+    # add volume, hardcode!
+    "docker", "run", "-v", "/home/ouser/pulse:/home/ouser/pulse", "domainscan_scan",
       SCAN_COMMAND,
       subdomains,
       "--scan=%s" % SUBDOMAIN_SCANNERS,
@@ -250,6 +259,7 @@ def subdomains(options):
 
 def shell_out(command, env=None):
     try:
+        print("debug:",command)
         print("[cmd] %s" % str.join(" ", command))
         response = subprocess.check_output(command, shell=False, env=env)
         output = str(response, encoding='UTF-8')
