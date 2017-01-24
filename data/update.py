@@ -259,7 +259,6 @@ def subdomains(options):
 
 def shell_out(command, env=None):
     try:
-        print("debug:",command)
         print("[cmd] %s" % str.join(" ", command))
         response = subprocess.check_output(command, shell=False, env=env)
         output = str(response, encoding='UTF-8')
